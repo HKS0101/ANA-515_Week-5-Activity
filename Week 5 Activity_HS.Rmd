@@ -1,0 +1,51 @@
+---
+title: "Week 5 Activity"
+author: "Humpreet Sahans"
+date: "2024-06-21"
+output: word_document
+---
+
+```{r setup, include = FALSE, echo=FALSE}
+library(tidyverse)
+
+#Reading the data
+url <- "https://github.com/fivethirtyeight/data/raw/master/biopics/biopics.csv"
+biopics <- read.csv(url)
+
+#Cleaning the variable 'type_of_subject' by removing trailing spaces from few cells & renaming subject_sex to subject_gender
+biopics <- biopics %>%
+  mutate(type_of_subject = str_trim(type_of_subject))%>%  
+           rename("subject_gender" = subject_sex)
+```
+
+#Visualization 1
+------------------------------------------------------------------------
+The Biopics dataset contains information on 761 movies released over the past ~100 years. The histogram below illustrates a clear trend of gradually increasing movie production over the years:
+
+```{r, echo=FALSE, inlcude=TRUE}
+
+ggplot(biopics, aes(year_release))+
+  geom_histogram(color = "darkblue", fill = 'darkblue', bins = 200)+
+  labs(title = "Trend of Movie Production since 1915 through 2014",
+       x = "Years Released",
+       y = "Number of Biopics")
+```
+
+#Visualization 2
+------------------------------------------------------------------------
+
+To explore the typical subjects chosen for biographical films, we've analyzed various movie categories and the genders of their subjects.
+
+As shown in the chart below, biopics often focus on figures such as criminals, musicians, athletes and historical personalities. Additionally, the data highlights a notable trend towards male subjects.
+
+```{r, echo=FALSE, include=TRUE}
+
+ggplot(biopics, aes(x = reorder(type_of_subject, table(type_of_subject)[type_of_subject]), fill = subject_gender)) +
+  geom_bar(color="white") +
+  coord_flip() +
+  labs(title = "Biopic subjects by Type & Gender",
+       x = "Type of Subject",
+       y = "Number of Biopics")
+
+```
+
